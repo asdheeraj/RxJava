@@ -35,4 +35,7 @@ dependencies {
     // Reactive
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjava_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroid_version"
+
+    //Recycler view
+    implementation "androidx.recyclerview:recyclerview:$rootProject.recycler_view"
 }

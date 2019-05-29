@@ -3,19 +3,28 @@ package com.dheeraj.rxjava.ui
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dheeraj.rxjava.R
 import com.dheeraj.rxjava.model.User
+import com.dheeraj.rxjava.ui.adapter.TimerAdapter
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
     private val TAG = MainActivity::class.java.simpleName
     private var users: Observable<User> = getUsers().subscribeOn(Schedulers.io())
     private val compositeDisposable = CompositeDisposable()
+    private val timerAdapter = TimerAdapter(
+        arrayListOf(
+            100, 99, 98, 97, 96
+        )
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,12 +33,13 @@ class MainActivity : AppCompatActivity() {
         /*
          Call one function at a time to closely observe the difference between the map operators.
          */
-        map()
+        // map()
         /*
         flatMap()
         concatMap()
         switchMap()
         */
+        setUpRecyclerView()
     }
 
     /**
@@ -147,5 +157,30 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.clear()
+    }
+
+    private fun timer() {
+        var count = 0
+        val disposable =
+            Observable.interval(0, 2, TimeUnit.SECONDS)
+                .flatMap {
+                    return@flatMap Observable.create<String> { emitter ->
+                        Log.d("IntervalExample", "Create")
+                        count++
+                        emitter.onNext("$count")
+                        emitter.onComplete()
+                    }
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+
+                }
+        compositeDisposable.add(disposable)
+    }
+
+    private fun setUpRecyclerView() {
+        val layoutManager = LinearLayoutManager(this)
+        rv_timers.layoutManager = layoutManager
+        rv_timers.adapter = timerAdapter
     }
 }

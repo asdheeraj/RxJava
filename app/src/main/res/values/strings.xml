@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RxJava</string>
+    <string name="timer_value">Timer: %1s</string>
 </resources>
