@@ -24,10 +24,11 @@ class MainActivity : AppCompatActivity() {
         /*
          Call one function at a time to closely observe the difference between the map operators.
          */
-        map()
+        // map()
+
+       flatMap()
+      // concatMap()
         /*
-        flatMap()
-        concatMap()
         switchMap()
         */
     }
@@ -59,6 +60,10 @@ class MainActivity : AppCompatActivity() {
         val disposable = users.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMap { user ->
+                Log.d("FlatMap", ":1${user.name}")
+                addIdToTheUser(user).subscribeOn(Schedulers.io())
+            }.flatMap { user ->
+                Log.d("FlatMap", ":2${user.name}")
                 addIdToTheUser(user).subscribeOn(Schedulers.io())
             }.subscribe({
                 Log.d(TAG, "${it.name} - ${it.age}  - ${it.id}")
@@ -78,6 +83,10 @@ class MainActivity : AppCompatActivity() {
         val disposable = users.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .concatMap { user ->
+                Log.d("ConcatMap", ":1${user.name}")
+                addIdToTheUser(user).subscribeOn(Schedulers.io())
+            }.concatMap { user ->
+                Log.d("ConcatMap", ":2${user.name}")
                 addIdToTheUser(user).subscribeOn(Schedulers.io())
             }.subscribe({
                 Log.d(TAG, "${it.name} - ${it.age}  - ${it.id}")
@@ -121,7 +130,7 @@ class MainActivity : AppCompatActivity() {
             users.forEach { user ->
                 it.onNext(user)
             }
-            it.onComplete()
+           // it.onComplete()
         }
     }
 
@@ -137,7 +146,7 @@ class MainActivity : AppCompatActivity() {
             val sleepTime = Random().nextInt(1000) + 500
             Thread.sleep(sleepTime.toLong())
             it.onNext(user)
-            it.onComplete()
+            //it.onComplete()
         }
     }
 
