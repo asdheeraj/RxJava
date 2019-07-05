@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Maps the user object to string and just returns the name(String) of the user
+     * Helpful to use to modify the observable that is emitted
      */
     private fun map() {
         val disposable = users.subscribeOn(Schedulers.io())
@@ -53,8 +54,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Flattens the result of One observable(getUsers()) with another(addIdToTheUser())
-     * and returns an Observable (Order not maintained)
+     * Flattens the multiple observables that are emitted by getUsers()
+     * and returns an Observable (Order of the Observables emitted is not maintained)
      */
     private fun flatMap() {
         val disposable = users.subscribeOn(Schedulers.io())
@@ -76,8 +77,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Concats the result of One observable(getUsers()) with another(addIdToTheUser())
-     * and returns an Observable (Order maintained)
+     * Concats the multiple observables that are emitted by getUsers()
+     * and returns an Observable (Order of the Observables emitted is maintained)
      */
     private fun concatMap() {
         val disposable = users.subscribeOn(Schedulers.io())
